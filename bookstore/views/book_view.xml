@@ -110,10 +110,11 @@
                     </group>
                     <field name="description"/>
                     <field name="book_ids" readonly="1">
-                        <tree>
+                        <tree string="Books in this Category">
                             <field name="name"/>
                             <field name="author"/>
                             <field name="price"/>
+                            <field name="stock_quantity"/>
                         </tree>
                     </field>
                 </sheet>
