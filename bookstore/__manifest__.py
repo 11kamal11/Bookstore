@@ -9,7 +9,7 @@
     'depends': ['base', 'website'],
     'data': [
         'security/ir.model.access.csv',
-        'views/book_view.xml',
+        'views/book_view_clean.xml',
         'views/website_templates.xml',
     ],
     'installable': True,
