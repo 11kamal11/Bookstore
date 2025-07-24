@@ -10,7 +10,6 @@
     'data': [
         'security/ir.model.access.csv',
         'views/book_view.xml',
-        'views/wizard_views.xml',
         'views/website_templates.xml',
     ],
     'installable': True,

@@ -4,23 +4,12 @@
         <field name="model">bookstore.book</field>
         <field name="arch" type="xml">
             <form string="Book">
-                <header>
-                    <button name="action_restock" type="object" string="Restock" class="btn-primary"/>
-                    <button name="action_mark_as_featured" type="object" string="Mark as Featured" 
-                            attrs="{'invisible': [('featured', '=', True)]}"/>
-                    <button name="action_unmark_as_featured" type="object" string="Unmark Featured" 
-                            attrs="{'invisible': [('featured', '=', False)]}"/>
-                    <field name="stock_status" widget="statusbar"/>
-                </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
                             <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
                         </button>
                     </div>
-                    
-                    <widget name="web_ribbon" title="Featured" bg_color="bg-success" 
-                            attrs="{'invisible': [('featured', '=', False)]}"/>
                     
                     <group>
                         <group name="basic_info">
@@ -32,49 +21,22 @@
                             <field name="edition"/>
                         </group>
                         <group name="details">
-                            <field name="book_format"/>
-                            <field name="condition"/>
                             <field name="language"/>
-                            <field name="genre"/>
                             <field name="pages"/>
-                            <field name="weight"/>
-                            <field name="dimensions"/>
-                        </group>
-                    </group>
-                    
-                    <group>
-                        <group name="pricing">
                             <field name="price"/>
                             <field name="cost_price"/>
-                            <field name="profit_margin" readonly="1"/>
-                        </group>
-                        <group name="stock">
                             <field name="stock_quantity"/>
-                            <field name="min_stock_level"/>
-                            <field name="reorder_quantity"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group name="computed">
+                            <field name="profit_margin" readonly="1"/>
+                            <field name="age_years" readonly="1"/>
                             <field name="is_available" readonly="1"/>
-                            <field name="total_value" readonly="1"/>
                         </group>
-                    </group>
-                    
-                    <group>
-                        <group name="supplier">
-                            <field name="supplier_id"/>
-                        </group>
-                        <group name="sales">
-                            <field name="total_sold"/>
-                            <field name="last_sale_date"/>
-                            <field name="featured"/>
-                        </group>
-                    </group>
-                    
-                    <group>
                         <group name="dates">
                             <field name="publication_date"/>
-                            <field name="age_years" readonly="1"/>
-                        </group>
-                        <group name="tags">
-                            <field name="tags" placeholder="e.g., bestseller, award-winning, classic"/>
                         </group>
                     </group>
                     
