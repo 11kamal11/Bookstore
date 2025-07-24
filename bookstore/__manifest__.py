@@ -8,9 +8,9 @@
     'category': 'Sales',
     'depends': ['base', 'website'],
     'data': [
+        'security/ir.model.access.csv',
         'views/book_view.xml',
         'views/website_templates.xml',
-        'security/ir.model.access.csv',
     ],
     'installable': True,
     'application': True,

@@ -4,6 +4,11 @@ from odoo.http import request
 
 class BookstoreController(http.Controller):
 
+    @http.route('/bookstore/test', type='http', auth='public', website=True)
+    def bookstore_test(self, **kwargs):
+        """Simple test page to verify routing works"""
+        return request.render('bookstore.bookstore_test', {})
+
     @http.route('/bookstore', type='http', auth='public', website=True)
     def bookstore_home(self, **kwargs):
         """Display all books on the bookstore homepage"""
@@ -20,11 +25,6 @@ class BookstoreController(http.Controller):
             return request.render('bookstore.bookstore_simple', {
                 'error': str(e)
             })
-
-    @http.route('/bookstore/test', type='http', auth='public', website=True)
-    def bookstore_test(self, **kwargs):
-        """Simple test page to verify routing works"""
-        return request.render('bookstore.bookstore_test', {})
 
     @http.route('/bookstore/book/<int:book_id>', type='http', auth='public', website=True)
     def book_detail(self, book_id, **kwargs):
