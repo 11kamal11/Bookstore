@@ -1,278 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Simple Test Template First -->
-    <template id="bookstore_test" name="Bookstore Test">
+    <template id="bookstore_home" name="Bookstore Home">
         <t t-call="website.layout">
             <div id="wrap">
                 <div class="container">
                     <div class="row mt-4">
                         <div class="col-12">
-                            <h1>Bookstore Test Page</h1>
-                            <p>If you can see this page, the routing is working!</p>
-                            <p><a href="/bookstore">Go to main bookstore page</a></p>
-                            <p>This is a custom webpage from the Bookstore module.</p>
+                            <h1>Welcome to Our Bookstore</h1>
+                            <p>Discover amazing books from our collection</p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </t>
-    </template>
-
-    <!-- Main Bookstore Homepage Template -->
-    <template id="bookstore_home" name="Bookstore Home">
-        <t t-call="website.layout">
-            <div id="wrap" class="oe_structure oe_empty">
-                <div class="container">
-                    <!-- Header Section -->
-                    <div class="row mt-4 mb-4">
-                        <div class="col-12">
-                            <h1 class="text-center">Welcome to Our Bookstore</h1>
-                            <p class="text-center text-muted">Discover amazing books from our collection</p>
-                        </div>
-                    </div>
-
-                    <!-- Search Bar -->
-                    <div class="row mb-4">
-                        <div class="col-md-8 offset-md-2">
-                            <form action="/bookstore/search" method="get" class="d-flex">
-                                <input type="text" name="search" class="form-control me-2" 
-                                       placeholder="Search books by title, author..." 
-                                       t-att-value="search_term or ''"/>
-                                <button type="submit" class="btn btn-primary">Search</button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Category Filter -->
-                    <div class="row mb-4">
-                        <div class="col-12">
-                            <div class="text-center">
-                                <a href="/bookstore" class="btn btn-outline-secondary me-2 mb-2"
-                                   t-att-class="'btn btn-secondary me-2 mb-2' if not current_category else 'btn btn-outline-secondary me-2 mb-2'">
-                                    All Categories
-                                </a>
-                                <t t-foreach="categories" t-as="category">
-                                    <a t-attf-href="/bookstore/category/#{category.id}" 
-                                       class="btn btn-outline-secondary me-2 mb-2"
-                                       t-att-class="'btn btn-secondary me-2 mb-2' if current_category and current_category.id == category.id else 'btn btn-outline-secondary me-2 mb-2'">
-                                        <t t-esc="category.name"/>
-                                        <span class="badge bg-light text-dark ms-1" t-esc="category.book_count"/>
-                                    </a>
-                                </t>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Current Category Display -->
-                    <t t-if="current_category">
-                        <div class="row mb-3">
-                            <div class="col-12">
-                                <h3>Books in <span t-esc="current_category.name"/></h3>
-                                <p t-if="current_category.description" t-esc="current_category.description"/>
-                            </div>
-                        </div>
-                    </t>
-
-                    <!-- Search Results Info -->
-                    <t t-if="search_term">
-                        <div class="row mb-3">
-                            <div class="col-12">
-                                <h3>Search Results for "<span t-esc="search_term"/>"</h3>
-                                <p><span t-esc="len(books)"/> book(s) found</p>
-                            </div>
-                        </div>
-                    </t>
-
-                    <!-- Books Grid -->
+                    
                     <div class="row">
-                        <t t-if="not books">
-                            <div class="col-12 text-center">
-                                <h4>No books found</h4>
-                                <p t-if="search_term">Try adjusting your search terms</p>
-                                <p t-if="current_category">This category doesn't have any books yet</p>
-                            </div>
-                        </t>
                         <t t-foreach="books" t-as="book">
-                            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body d-flex flex-column">
-                                        <h5 class="card-title">
-                                            <a t-attf-href="/bookstore/book/#{book.id}" class="text-decoration-none">
-                                                <t t-esc="book.name"/>
-                                            </a>
-                                        </h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">
-                                            by <t t-esc="book.author"/>
-                                        </h6>
-                                        <t t-if="book.category_id">
-                                            <small class="text-muted">
-                                                Category: <t t-esc="book.category_id.name"/>
-                                            </small>
-                                        </t>
-                                        <div class="mt-auto">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span class="h5 text-primary mb-0">$<t t-esc="'%.2f' % book.price"/></span>
-                                                <t t-if="book.stock_quantity > 0">
-                                                    <span class="badge bg-success">Available</span>
-                                                </t>
-                                                <t t-else="">
-                                                    <span class="badge bg-danger">Out of Stock</span>
-                                                </t>
-                                            </div>
-                                            <div class="mt-2">
-                                                <a t-attf-href="/bookstore/book/#{book.id}" class="btn btn-primary btn-sm w-100">
-                                                    View Details
-                                                </a>
-                                            </div>
-                                        </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title" t-esc="book.name"/>
+                                        <p class="card-text">
+                                            <strong>Author:</strong> <span t-esc="book.author"/><br/>
+                                            <strong>Price:</strong> $<span t-esc="book.price"/><br/>
+                                            <t t-if="book.category_id">
+                                                <strong>Category:</strong> <span t-esc="book.category_id.name"/>
+                                            </t>
+                                        </p>
+                                        <a t-attf-href="/bookstore/book/{{book.id}}" class="btn btn-primary">View Details</a>
                                     </div>
                                 </div>
                             </div>
                         </t>
                     </div>
-
-                    <!-- No books message -->
-                    <t t-if="not books and not search_term and not current_category">
-                        <div class="row">
-                            <div class="col-12 text-center">
-                                <h4>Welcome to our bookstore!</h4>
-                                <p>We're currently updating our collection. Please check back soon!</p>
-                            </div>
-                        </div>
-                    </t>
                 </div>
             </div>
         </t>
     </template>
 
-    <!-- Book Detail Template -->
     <template id="book_detail" name="Book Detail">
-        <t t-call="website.layout">
-            <div id="wrap" class="oe_structure oe_empty">
-                <div class="container">
-                    <!-- Breadcrumb -->
-                    <nav aria-label="breadcrumb" class="mt-3">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/bookstore">Bookstore</a></li>
-                            <li class="breadcrumb-item" t-if="book.category_id">
-                                <a t-attf-href="/bookstore/category/#{book.category_id.id}" t-esc="book.category_id.name"/>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page" t-esc="book.name"/>
-                        </ol>
-                    </nav>
-
-                    <!-- Book Details -->
-                    <div class="row mt-4">
-                        <div class="col-md-8">
-                            <h1 t-esc="book.name"/>
-                            <h4 class="text-muted mb-3">by <t t-esc="book.author"/></h4>
-                            
-                            <div class="row mb-4">
-                                <div class="col-sm-6">
-                                    <h3 class="text-primary">$<t t-esc="'%.2f' % book.price"/></h3>
-                                    <t t-if="book.stock_quantity > 0">
-                                        <span class="badge bg-success fs-6">Available (<t t-esc="book.stock_quantity"/> in stock)</span>
-                                    </t>
-                                    <t t-else="">
-                                        <span class="badge bg-danger fs-6">Out of Stock</span>
-                                    </t>
-                                </div>
-                            </div>
-
-                            <t t-if="book.description">
-                                <h5>Description</h5>
-                                <p t-esc="book.description"/>
-                            </t>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="mb-0">Book Information</h5>
-                                </div>
-                                <div class="card-body">
-                                    <table class="table table-borderless">
-                                        <tr t-if="book.isbn">
-                                            <td><strong>ISBN:</strong></td>
-                                            <td t-esc="book.isbn"/>
-                                        </tr>
-                                        <tr t-if="book.publisher">
-                                            <td><strong>Publisher:</strong></td>
-                                            <td t-esc="book.publisher"/>
-                                        </tr>
-                                        <tr t-if="book.publication_date">
-                                            <td><strong>Published:</strong></td>
-                                            <td t-esc="book.publication_date"/>
-                                        </tr>
-                                        <tr t-if="book.pages">
-                                            <td><strong>Pages:</strong></td>
-                                            <td t-esc="book.pages"/>
-                                        </tr>
-                                        <tr t-if="book.language">
-                                            <td><strong>Language:</strong></td>
-                                            <td>
-                                                <t t-if="book.language == 'en'">English</t>
-                                                <t t-elif="book.language == 'fr'">French</t>
-                                                <t t-elif="book.language == 'es'">Spanish</t>
-                                                <t t-elif="book.language == 'de'">German</t>
-                                                <t t-elif="book.language == 'it'">Italian</t>
-                                                <t t-else="" t-esc="book.language"/>
-                                            </td>
-                                        </tr>
-                                        <tr t-if="book.edition">
-                                            <td><strong>Edition:</strong></td>
-                                            <td t-esc="book.edition"/>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Related Books -->
-                    <t t-if="related_books">
-                        <div class="row mt-5">
-                            <div class="col-12">
-                                <h3>Related Books</h3>
-                                <div class="row">
-                                    <t t-foreach="related_books" t-as="related_book">
-                                        <div class="col-lg-3 col-md-6 mb-3">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h6 class="card-title">
-                                                        <a t-attf-href="/bookstore/book/#{related_book.id}" class="text-decoration-none">
-                                                            <t t-esc="related_book.name"/>
-                                                        </a>
-                                                    </h6>
-                                                    <p class="card-text text-muted small">by <t t-esc="related_book.author"/></p>
-                                                    <p class="card-text">$<t t-esc="'%.2f' % related_book.price"/></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </t>
-                                </div>
-                            </div>
-                        </div>
-                    </t>
-                </div>
-            </div>
-        </t>
-    </template>
-
-    <!-- Simple Fallback Template -->
-    <template id="bookstore_simple" name="Bookstore Simple">
         <t t-call="website.layout">
             <div id="wrap">
                 <div class="container">
                     <div class="row mt-4">
                         <div class="col-12">
-                            <h1>Bookstore</h1>
-                            <p>Welcome to our bookstore!</p>
-                            <t t-if="error">
-                                <div class="alert alert-warning">
-                                    <strong>Error:</strong> <span t-esc="error"/>
+                            <h1 t-esc="book.name"/>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p><strong>Author:</strong> <span t-esc="book.author"/></p>
+                                    <p><strong>ISBN:</strong> <span t-esc="book.isbn"/></p>
+                                    <p><strong>Price:</strong> $<span t-esc="book.price"/></p>
+                                    <t t-if="book.category_id">
+                                        <p><strong>Category:</strong> <span t-esc="book.category_id.name"/></p>
+                                    </t>
+                                    <t t-if="book.description">
+                                        <h3>Description</h3>
+                                        <p t-esc="book.description"/>
+                                    </t>
                                 </div>
-                            </t>
+                            </div>
+                            <a href="/bookstore" class="btn btn-secondary">Back to Bookstore</a>
                         </div>
                     </div>
                 </div>
@@ -280,21 +64,14 @@
         </t>
     </template>
 
-    <!-- Add menu item to website -->
-    <record id="menu_bookstore_website" model="website.menu">
+    <!-- Website Menu Items -->
+    <record id="bookstore_menu" model="website.menu">
         <field name="name">Bookstore</field>
         <field name="url">/bookstore</field>
         <field name="parent_id" ref="website.main_menu"/>
         <field name="sequence">50</field>
     </record>
 
-    <!-- Add a test menu item -->
-    <record id="menu_bookstore_test" model="website.menu">
-        <field name="name">Bookstore Test</field>
-        <field name="url">/bookstore/test</field>
-        <field name="parent_id" ref="website.main_menu"/>
-        <field name="sequence">51</field>
-    </record>
 </odoo>
                         </div>
                     </div>
