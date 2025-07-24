@@ -4,7 +4,7 @@
     'version': '1.0',
     'summary': 'Simple Bookstore module',
     'description': 'A simple Odoo 18 module for managing books in a bookstore.',
-    'author': 'Your Name',
+    'author': 'Kamal',
     'category': 'Sales',
     'depends': ['base'],
     'data': [
