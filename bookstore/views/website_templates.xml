@@ -26,19 +26,33 @@
                     <!-- Header Section -->
                     <div class="row mt-4 mb-4">
                         <div class="col-12">
-                            <h1 class="text-center">Welcome to Our Bookstore</h1>
+                            <h1 class="text-center">📚 Welcome to Our Bookstore</h1>
                             <p class="text-center text-muted">Discover amazing books from our collection</p>
                         </div>
                     </div>
 
-                    <!-- Search Bar -->
+                    <!-- Search and Sort Bar -->
                     <div class="row mb-4">
-                        <div class="col-md-8 offset-md-2">
-                            <form action="/bookstore/search" method="get" class="d-flex">
+                        <div class="col-md-6">
+                            <form action="/bookstore" method="get" class="d-flex">
                                 <input type="text" name="search" class="form-control me-2" 
                                        placeholder="Search books by title, author..." 
                                        t-att-value="search_term or ''"/>
-                                <button type="submit" class="btn btn-primary">Search</button>
+                                <input type="hidden" name="category" t-att-value="current_category.id if current_category else ''"/>
+                                <button type="submit" class="btn btn-primary">🔍 Search</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <form action="/bookstore" method="get" class="d-flex justify-content-end">
+                                <input type="hidden" name="search" t-att-value="search_term or ''"/>
+                                <input type="hidden" name="category" t-att-value="current_category.id if current_category else ''"/>
+                                <select name="sort" class="form-select me-2" style="width: auto;" onchange="this.form.submit()">
+                                    <option value="name" t-att-selected="'selected' if current_sort == 'name' else None">Sort by Name</option>
+                                    <option value="price_low" t-att-selected="'selected' if current_sort == 'price_low' else None">Price: Low to High</option>
+                                    <option value="price_high" t-att-selected="'selected' if current_sort == 'price_high' else None">Price: High to Low</option>
+                                    <option value="newest" t-att-selected="'selected' if current_sort == 'newest' else None">Newest First</option>
+                                    <option value="rating" t-att-selected="'selected' if current_sort == 'rating' else None">Highest Rated</option>
+                                </select>
                             </form>
                         </div>
                     </div>
@@ -49,10 +63,10 @@
                             <div class="text-center">
                                 <a href="/bookstore" class="btn btn-outline-secondary me-2 mb-2"
                                    t-att-class="'btn btn-secondary me-2 mb-2' if not current_category else 'btn btn-outline-secondary me-2 mb-2'">
-                                    All Categories
+                                    📚 All Categories
                                 </a>
                                 <t t-foreach="categories" t-as="category">
-                                    <a t-attf-href="/bookstore/category/#{category.id}" 
+                                    <a t-attf-href="/bookstore?category=#{category.id}" 
                                        class="btn btn-outline-secondary me-2 mb-2"
                                        t-att-class="'btn btn-secondary me-2 mb-2' if current_category and current_category.id == category.id else 'btn btn-outline-secondary me-2 mb-2'">
                                         <t t-esc="category.name"/>
@@ -67,7 +81,7 @@
                     <t t-if="current_category">
                         <div class="row mb-3">
                             <div class="col-12">
-                                <h3>Books in <span t-esc="current_category.name"/></h3>
+                                <h3>📖 Books in <span t-esc="current_category.name"/></h3>
                                 <p t-if="current_category.description" t-esc="current_category.description"/>
                             </div>
                         </div>
@@ -77,7 +91,7 @@
                     <t t-if="search_term">
                         <div class="row mb-3">
                             <div class="col-12">
-                                <h3>Search Results for "<span t-esc="search_term"/>"</h3>
+                                <h3>🔍 Search Results for "<span t-esc="search_term"/>"</h3>
                                 <p><span t-esc="len(books)"/> book(s) found</p>
                             </div>
                         </div>
@@ -87,14 +101,28 @@
                     <div class="row">
                         <t t-if="not books">
                             <div class="col-12 text-center">
-                                <h4>No books found</h4>
+                                <h4>📭 No books found</h4>
                                 <p t-if="search_term">Try adjusting your search terms</p>
                                 <p t-if="current_category">This category doesn't have any books yet</p>
                             </div>
                         </t>
                         <t t-foreach="books" t-as="book">
                             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                                <div class="card h-100">
+                                <div class="card h-100 shadow-sm">
+                                    <!-- Book Image -->
+                                    <div class="text-center p-3" style="background-color: #f8f9fa;">
+                                        <t t-if="book.image">
+                                            <img t-attf-src="data:image/png;base64,#{book.image_medium}" 
+                                                 class="card-img-top" style="height: 200px; object-fit: cover; width: auto;"/>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="bg-secondary d-flex align-items-center justify-content-center" 
+                                                 style="height: 200px; border-radius: 5px;">
+                                                <span class="text-white">📖 No Image</span>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    
                                     <div class="card-body d-flex flex-column">
                                         <h5 class="card-title">
                                             <a t-attf-href="/bookstore/book/#{book.id}" class="text-decoration-none">
@@ -102,27 +130,53 @@
                                             </a>
                                         </h5>
                                         <h6 class="card-subtitle mb-2 text-muted">
-                                            by <t t-esc="book.author"/>
+                                            👤 by <t t-esc="book.author"/>
                                         </h6>
+                                        
+                                        <!-- Rating -->
+                                        <t t-if="book.rating > 0">
+                                            <div class="mb-2">
+                                                <span class="text-warning">
+                                                    <t t-foreach="range(int(book.rating))" t-as="star">⭐</t>
+                                                </span>
+                                                <small class="text-muted">(<t t-esc="book.review_count"/> reviews)</small>
+                                            </div>
+                                        </t>
+                                        
                                         <t t-if="book.category_id">
                                             <small class="text-muted">
-                                                Category: <t t-esc="book.category_id.name"/>
+                                                📂 Category: <t t-esc="book.category_id.name"/>
                                             </small>
                                         </t>
+                                        
                                         <div class="mt-auto">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span class="h5 text-primary mb-0">$<t t-esc="'%.2f' % book.price"/></span>
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="h5 text-primary mb-0">💰 $<t t-esc="'%.2f' % book.price"/></span>
                                                 <t t-if="book.stock_quantity > 0">
-                                                    <span class="badge bg-success">Available</span>
+                                                    <span class="badge bg-success">✅ Available (<t t-esc="book.stock_quantity"/>)</span>
                                                 </t>
                                                 <t t-else="">
-                                                    <span class="badge bg-danger">Out of Stock</span>
+                                                    <span class="badge bg-danger">❌ Out of Stock</span>
                                                 </t>
                                             </div>
-                                            <div class="mt-2">
-                                                <a t-attf-href="/bookstore/book/#{book.id}" class="btn btn-primary btn-sm w-100">
-                                                    View Details
+                                            
+                                            <div class="d-grid gap-2">
+                                                <a t-attf-href="/bookstore/book/#{book.id}" class="btn btn-outline-primary btn-sm">
+                                                    👁️ View Details
                                                 </a>
+                                                <t t-if="book.stock_quantity > 0">
+                                                    <form action="/bookstore/add_to_cart" method="post" style="display: inline;">
+                                                        <input type="hidden" name="book_id" t-att-value="book.id"/>
+                                                        <button type="submit" class="btn btn-primary btn-sm w-100">
+                                                            🛒 Add to Cart
+                                                        </button>
+                                                    </form>
+                                                </t>
+                                                <t t-else="">
+                                                    <button class="btn btn-secondary btn-sm w-100" disabled="disabled">
+                                                        📋 Notify When Available
+                                                    </button>
+                                                </t>
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +189,7 @@
                     <t t-if="not books and not search_term and not current_category">
                         <div class="row">
                             <div class="col-12 text-center">
-                                <h4>Welcome to our bookstore!</h4>
+                                <h4>🎉 Welcome to our bookstore!</h4>
                                 <p>We're currently updating our collection. Please check back soon!</p>
                             </div>
                         </div>
@@ -145,7 +199,7 @@
         </t>
     </template>
 
-    <!-- Book Detail Template -->
+    <!-- Enhanced Book Detail Template -->
     <template id="book_detail" name="Book Detail">
         <t t-call="website.layout">
             <div id="wrap" class="oe_structure oe_empty">
@@ -153,79 +207,231 @@
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb" class="mt-3">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/bookstore">Bookstore</a></li>
+                            <li class="breadcrumb-item"><a href="/bookstore">📚 Bookstore</a></li>
                             <li class="breadcrumb-item" t-if="book.category_id">
-                                <a t-attf-href="/bookstore/category/#{book.category_id.id}" t-esc="book.category_id.name"/>
+                                <a t-attf-href="/bookstore?category=#{book.category_id.id}" t-esc="book.category_id.name"/>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page" t-esc="book.name"/>
                         </ol>
                     </nav>
 
+                    <!-- Success message for review submission -->
+                    <t t-if="request.params.get('review_submitted')">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ✅ Thank you! Your review has been submitted successfully.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    </t>
+
                     <!-- Book Details -->
                     <div class="row mt-4">
-                        <div class="col-md-8">
-                            <h1 t-esc="book.name"/>
-                            <h4 class="text-muted mb-3">by <t t-esc="book.author"/></h4>
+                        <!-- Left Column - Book Image and Purchase -->
+                        <div class="col-md-4">
+                            <div class="text-center mb-4">
+                                <t t-if="book.image">
+                                    <img t-attf-src="data:image/png;base64,#{book.image}" 
+                                         class="img-fluid rounded shadow" style="max-height: 400px;"/>
+                                </t>
+                                <t t-else="">
+                                    <div class="bg-secondary d-flex align-items-center justify-content-center rounded" 
+                                         style="height: 400px;">
+                                        <span class="text-white h3">📖 No Image Available</span>
+                                    </div>
+                                </t>
+                            </div>
                             
-                            <div class="row mb-4">
-                                <div class="col-sm-6">
-                                    <h3 class="text-primary">$<t t-esc="'%.2f' % book.price"/></h3>
+                            <!-- Purchase Section -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3 class="text-primary text-center">💰 $<t t-esc="'%.2f' % book.price"/></h3>
+                                    
                                     <t t-if="book.stock_quantity > 0">
-                                        <span class="badge bg-success fs-6">Available (<t t-esc="book.stock_quantity"/> in stock)</span>
+                                        <div class="text-center mb-3">
+                                            <span class="badge bg-success fs-6">✅ Available (<t t-esc="book.stock_quantity"/> in stock)</span>
+                                        </div>
+                                        
+                                        <form action="/bookstore/add_to_cart" method="post">
+                                            <div class="mb-3">
+                                                <label for="quantity" class="form-label">Quantity:</label>
+                                                <select name="quantity" id="quantity" class="form-select">
+                                                    <t t-foreach="range(1, min(book.stock_quantity + 1, 11))" t-as="qty">
+                                                        <option t-att-value="qty" t-esc="qty"/>
+                                                    </t>
+                                                </select>
+                                            </div>
+                                            <input type="hidden" name="book_id" t-att-value="book.id"/>
+                                            <div class="d-grid">
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    🛒 Add to Cart
+                                                </button>
+                                            </div>
+                                        </form>
                                     </t>
                                     <t t-else="">
-                                        <span class="badge bg-danger fs-6">Out of Stock</span>
+                                        <div class="text-center">
+                                            <span class="badge bg-danger fs-6 mb-3">❌ Out of Stock</span>
+                                            <div class="d-grid">
+                                                <button class="btn btn-secondary btn-lg" disabled="disabled">
+                                                    📋 Notify When Available
+                                                </button>
+                                            </div>
+                                        </div>
                                     </t>
                                 </div>
                             </div>
-
-                            <t t-if="book.description">
-                                <h5>Description</h5>
-                                <p t-esc="book.description"/>
-                            </t>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="card">
+                        <!-- Right Column - Book Information -->
+                        <div class="col-md-8">
+                            <h1 t-esc="book.name"/>
+                            <h4 class="text-muted mb-3">👤 by <t t-esc="book.author"/></h4>
+                            
+                            <!-- Rating -->
+                            <t t-if="book.rating > 0">
+                                <div class="mb-3">
+                                    <span class="text-warning h5">
+                                        <t t-foreach="range(int(book.rating))" t-as="star">⭐</t>
+                                        <t t-if="book.rating - int(book.rating) >= 0.5">⭐</t>
+                                    </span>
+                                    <span class="text-muted">(<t t-esc="book.review_count"/> reviews)</span>
+                                </div>
+                            </t>
+                            
+                            <!-- Book Information Table -->
+                            <div class="card mb-4">
                                 <div class="card-header">
-                                    <h5 class="mb-0">Book Information</h5>
+                                    <h5 class="mb-0">📋 Book Information</h5>
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-borderless">
-                                        <tr t-if="book.isbn">
-                                            <td><strong>ISBN:</strong></td>
-                                            <td t-esc="book.isbn"/>
-                                        </tr>
-                                        <tr t-if="book.publisher">
-                                            <td><strong>Publisher:</strong></td>
-                                            <td t-esc="book.publisher"/>
-                                        </tr>
-                                        <tr t-if="book.publication_date">
-                                            <td><strong>Published:</strong></td>
-                                            <td t-esc="book.publication_date"/>
-                                        </tr>
-                                        <tr t-if="book.pages">
-                                            <td><strong>Pages:</strong></td>
-                                            <td t-esc="book.pages"/>
-                                        </tr>
-                                        <tr t-if="book.language">
-                                            <td><strong>Language:</strong></td>
-                                            <td>
-                                                <t t-if="book.language == 'en'">English</t>
-                                                <t t-elif="book.language == 'fr'">French</t>
-                                                <t t-elif="book.language == 'es'">Spanish</t>
-                                                <t t-elif="book.language == 'de'">German</t>
-                                                <t t-elif="book.language == 'it'">Italian</t>
-                                                <t t-else="" t-esc="book.language"/>
-                                            </td>
-                                        </tr>
-                                        <tr t-if="book.edition">
-                                            <td><strong>Edition:</strong></td>
-                                            <td t-esc="book.edition"/>
-                                        </tr>
-                                    </table>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <table class="table table-borderless">
+                                                <tr t-if="book.isbn">
+                                                    <td><strong>📚 ISBN:</strong></td>
+                                                    <td t-esc="book.isbn"/>
+                                                </tr>
+                                                <tr t-if="book.publisher">
+                                                    <td><strong>🏢 Publisher:</strong></td>
+                                                    <td t-esc="book.publisher"/>
+                                                </tr>
+                                                <tr t-if="book.publication_date">
+                                                    <td><strong>📅 Published:</strong></td>
+                                                    <td t-esc="book.publication_date"/>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <table class="table table-borderless">
+                                                <tr t-if="book.pages">
+                                                    <td><strong>📄 Pages:</strong></td>
+                                                    <td t-esc="book.pages"/>
+                                                </tr>
+                                                <tr t-if="book.language">
+                                                    <td><strong>🌍 Language:</strong></td>
+                                                    <td>
+                                                        <t t-if="book.language == 'en'">English</t>
+                                                        <t t-elif="book.language == 'fr'">French</t>
+                                                        <t t-elif="book.language == 'es'">Spanish</t>
+                                                        <t t-elif="book.language == 'de'">German</t>
+                                                        <t t-elif="book.language == 'it'">Italian</t>
+                                                        <t t-else="" t-esc="book.language"/>
+                                                    </td>
+                                                </tr>
+                                                <tr t-if="book.edition">
+                                                    <td><strong>📖 Edition:</strong></td>
+                                                    <td t-esc="book.edition"/>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            
+                            <!-- Description -->
+                            <t t-if="book.description">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">📝 Description</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div t-field="book.description"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Section -->
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <h3>⭐ Customer Reviews</h3>
+                            
+                            <!-- Review Form -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">✍️ Write a Review</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form action="/bookstore/review/submit" method="post">
+                                        <input type="hidden" name="book_id" t-att-value="book.id"/>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="customer_name" class="form-label">Your Name *</label>
+                                                    <input type="text" class="form-control" id="customer_name" name="customer_name" required="required"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="customer_email" class="form-label">Email</label>
+                                                    <input type="email" class="form-control" id="customer_email" name="customer_email"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="rating" class="form-label">Rating *</label>
+                                            <select class="form-select" id="rating" name="rating" required="required">
+                                                <option value="">Select Rating</option>
+                                                <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
+                                                <option value="4">⭐⭐⭐⭐ 4 Stars</option>
+                                                <option value="3">⭐⭐⭐ 3 Stars</option>
+                                                <option value="2">⭐⭐ 2 Stars</option>
+                                                <option value="1">⭐ 1 Star</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="review_text" class="form-label">Your Review</label>
+                                            <textarea class="form-control" id="review_text" name="review_text" rows="4" placeholder="Tell us what you think about this book..."></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">📝 Submit Review</button>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <!-- Display Reviews -->
+                            <t t-if="reviews">
+                                <div class="reviews-list">
+                                    <t t-foreach="reviews" t-as="review">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6 class="card-title">👤 <t t-esc="review.customer_name"/></h6>
+                                                    <small class="text-muted" t-esc="review.create_date.strftime('%B %d, %Y')"/>
+                                                </div>
+                                                <div class="text-warning mb-2">
+                                                    <t t-foreach="range(int(review.rating))" t-as="star">⭐</t>
+                                                </div>
+                                                <p class="card-text" t-esc="review.review_text"/>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="text-center text-muted">
+                                    <p>No reviews yet. Be the first to review this book!</p>
+                                </div>
+                            </t>
                         </div>
                     </div>
 
@@ -233,19 +439,31 @@
                     <t t-if="related_books">
                         <div class="row mt-5">
                             <div class="col-12">
-                                <h3>Related Books</h3>
+                                <h3>📚 Related Books</h3>
                                 <div class="row">
                                     <t t-foreach="related_books" t-as="related_book">
                                         <div class="col-lg-3 col-md-6 mb-3">
-                                            <div class="card">
+                                            <div class="card h-100">
+                                                <div class="text-center p-2">
+                                                    <t t-if="related_book.image_small">
+                                                        <img t-attf-src="data:image/png;base64,#{related_book.image_small}" 
+                                                             class="card-img-top" style="height: 150px; object-fit: cover; width: auto;"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <div class="bg-light d-flex align-items-center justify-content-center" 
+                                                             style="height: 150px;">
+                                                            <span class="text-muted">📖</span>
+                                                        </div>
+                                                    </t>
+                                                </div>
                                                 <div class="card-body">
                                                     <h6 class="card-title">
                                                         <a t-attf-href="/bookstore/book/#{related_book.id}" class="text-decoration-none">
                                                             <t t-esc="related_book.name"/>
                                                         </a>
                                                     </h6>
-                                                    <p class="card-text text-muted small">by <t t-esc="related_book.author"/></p>
-                                                    <p class="card-text">$<t t-esc="'%.2f' % related_book.price"/></p>
+                                                    <p class="card-text text-muted small">👤 by <t t-esc="related_book.author"/></p>
+                                                    <p class="card-text">💰 $<t t-esc="'%.2f' % related_book.price"/></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -254,6 +472,25 @@
                             </div>
                         </div>
                     </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Cart Error Template -->
+    <template id="cart_error" name="Cart Error">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="alert alert-danger">
+                                <h4>❌ Unable to Add to Cart</h4>
+                                <p t-esc="error"/>
+                                <a t-attf-href="/bookstore/book/#{book.id}" class="btn btn-primary">← Back to Book</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </t>
