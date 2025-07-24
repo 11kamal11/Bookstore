@@ -2,13 +2,14 @@
 {
     'name': 'Bookstore',
     'version': '1.0',
-    'summary': 'Simple Bookstore module',
-    'description': 'A simple Odoo 18 module for managing books in a bookstore.',
+    'summary': 'Simple Bookstore module with Website',
+    'description': 'A simple Odoo 18 module for managing books in a bookstore with frontend website.',
     'author': 'Kamal',
     'category': 'Sales',
-    'depends': ['base'],
+    'depends': ['base', 'website'],
     'data': [
         'views/book_view.xml',
+        'views/website_templates.xml',
         'security/ir.model.access.csv',
     ],
     'installable': True,
