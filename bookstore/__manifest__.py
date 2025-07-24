@@ -6,7 +6,7 @@
     'description': 'A simple Odoo 18 module for managing books in a bookstore with frontend website.',
     'author': 'Kamal',
     'category': 'Sales',
-    'depends': ['base', 'website', 'website_sale', 'stock', 'sale'],
+    'depends': ['base', 'website'],
     'data': [
         'security/ir.model.access.csv',
         'views/book_view.xml',

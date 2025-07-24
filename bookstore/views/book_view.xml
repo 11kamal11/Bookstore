@@ -9,15 +9,6 @@
                         <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
                             <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
                         </button>
-                        <button name="action_add_to_cart" type="object" class="oe_stat_button" icon="fa-shopping-cart">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value"><field name="sales_count"/></span>
-                                <span class="o_stat_text">Sales</span>
-                            </div>
-                        </button>
-                    </div>
-                    <div class="oe_title">
-                        <field name="image" widget="image" class="oe_avatar" options="{'preview_image': 'image_medium'}"/>
                     </div>
                     <group>
                         <group>
@@ -34,8 +25,6 @@
                             <field name="profit_margin" readonly="1"/>
                             <field name="stock_quantity"/>
                             <field name="is_available" readonly="1"/>
-                            <field name="website_published"/>
-                            <field name="sale_ok"/>
                         </group>
                     </group>
                     <group>
