@@ -16,7 +16,12 @@
         </field>
     </record>
 
+    <record id="action_books" model="ir.actions.act_window">
+        <field name="name">Books</field>
+        <field name="res_model">bookstore.book</field>
+        <field name="view_mode">form</field>
+    </record>
+
     <menuitem id="menu_bookstore_root" name="Bookstore"/>
-    <menuitem id="menu_book" name="Books" parent="menu_bookstore_root"/>
-    <act_window id="action_books" name="Books" res_model="bookstore.book" view_mode="form" menu_id="menu_book"/>
+    <menuitem id="menu_book" name="Books" parent="menu_bookstore_root" action="action_books"/>
 </odoo>
