@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Simple Test Template First -->
+    <template id="bookstore_test" name="Bookstore Test">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h1>Bookstore Test Page</h1>
+                            <p>If you can see this page, the routing is working!</p>
+                            <p><a href="/bookstore">Go to main bookstore page</a></p>
+                            <p>This is a custom webpage from the Bookstore module.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
     <template id="bookstore_home" name="Bookstore Home">
         <t t-call="website.layout">
             <div id="wrap">
@@ -63,6 +81,21 @@
             </div>
         </t>
     </template>
+
+    <!-- Website Menu Items -->
+    <record id="bookstore_test_menu" model="website.menu">
+        <field name="name">Bookstore Test</field>
+        <field name="url">/bookstore/test</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="bookstore_menu" model="website.menu">
+        <field name="name">Bookstore</field>
+        <field name="url">/bookstore</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">51</field>
+    </record>
 
 </odoo>
                         </div>

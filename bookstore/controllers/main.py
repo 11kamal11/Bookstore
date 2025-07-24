@@ -4,6 +4,10 @@ from odoo.http import request
 
 class BookstoreController(http.Controller):
 
+    @http.route('/bookstore/test', type='http', auth='public', website=True)
+    def bookstore_test(self, **kwargs):
+        return request.render('bookstore.bookstore_test')
+
     @http.route('/bookstore', type='http', auth='public', website=True)
     def bookstore_home(self, **kwargs):
         books = request.env['bookstore.book'].sudo().search([])

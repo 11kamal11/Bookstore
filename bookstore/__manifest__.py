@@ -10,7 +10,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/book_view.xml',
-        'views/website_templates_simple.xml',
+        'views/website_templates.xml',
     ],
     'installable': True,
     'application': True,
