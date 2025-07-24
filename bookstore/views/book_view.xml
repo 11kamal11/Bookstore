@@ -22,18 +22,18 @@
         </field>
     </record>
 
-    <!-- Book Tree View -->
+    <!-- Book List View (replacing tree) -->
     <record id="view_book_tree" model="ir.ui.view">
-        <field name="name">book.tree</field>
+        <field name="name">book.list</field>
         <field name="model">bookstore.book</field>
         <field name="arch" type="xml">
-            <tree string="Books">
+            <list string="Books">
                 <field name="name"/>
                 <field name="author"/>
                 <field name="isbn"/>
                 <field name="price"/>
                 <field name="category_id"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -71,15 +71,15 @@
         </field>
     </record>
 
-    <!-- Category Tree View -->
+    <!-- Category List View (replacing tree) -->
     <record id="view_category_tree" model="ir.ui.view">
-        <field name="name">category.tree</field>
+        <field name="name">category.list</field>
         <field name="model">bookstore.category</field>
         <field name="arch" type="xml">
-            <tree string="Categories">
+            <list string="Categories">
                 <field name="name"/>
                 <field name="description"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -88,7 +88,7 @@
         <field name="name">Books</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">bookstore.book</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first book!
@@ -101,7 +101,7 @@
         <field name="name">Categories</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">bookstore.category</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first category!
