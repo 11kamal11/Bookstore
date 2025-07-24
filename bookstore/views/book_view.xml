@@ -98,6 +98,20 @@
     </record>
 
     <!-- Category Views -->
+    <!-- First create a simple tree view for books in category -->
+    <record id="view_book_tree_simple" model="ir.ui.view">
+        <field name="name">book.tree.simple</field>
+        <field name="model">bookstore.book</field>
+        <field name="arch" type="xml">
+            <tree string="Books">
+                <field name="name"/>
+                <field name="author"/>
+                <field name="price"/>
+                <field name="stock_quantity"/>
+            </tree>
+        </field>
+    </record>
+
     <record id="view_category_form" model="ir.ui.view">
         <field name="name">category.form</field>
         <field name="model">bookstore.category</field>
@@ -109,14 +123,7 @@
                         <field name="book_count" readonly="1"/>
                     </group>
                     <field name="description"/>
-                    <field name="book_ids" readonly="1">
-                        <tree string="Books in this Category">
-                            <field name="name"/>
-                            <field name="author"/>
-                            <field name="price"/>
-                            <field name="stock_quantity"/>
-                        </tree>
-                    </field>
+                    <field name="book_ids" readonly="1"/>
                 </sheet>
             </form>
         </field>

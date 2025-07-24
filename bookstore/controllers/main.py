@@ -7,13 +7,24 @@ class BookstoreController(http.Controller):
     @http.route('/bookstore', type='http', auth='public', website=True)
     def bookstore_home(self, **kwargs):
         """Display all books on the bookstore homepage"""
-        books = request.env['bookstore.book'].sudo().search([('active', '=', True)])
-        categories = request.env['bookstore.category'].sudo().search([])
-        
-        return request.render('bookstore.bookstore_home', {
-            'books': books,
-            'categories': categories,
-        })
+        try:
+            books = request.env['bookstore.book'].sudo().search([('active', '=', True)])
+            categories = request.env['bookstore.category'].sudo().search([])
+            
+            return request.render('bookstore.bookstore_home', {
+                'books': books,
+                'categories': categories,
+            })
+        except Exception as e:
+            # Fallback if there's an issue
+            return request.render('bookstore.bookstore_simple', {
+                'error': str(e)
+            })
+
+    @http.route('/bookstore/test', type='http', auth='public', website=True)
+    def bookstore_test(self, **kwargs):
+        """Simple test page to verify routing works"""
+        return request.render('bookstore.bookstore_test', {})
 
     @http.route('/bookstore/book/<int:book_id>', type='http', auth='public', website=True)
     def book_detail(self, book_id, **kwargs):

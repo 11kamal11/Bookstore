@@ -241,6 +241,44 @@
         </t>
     </template>
 
+    <!-- Simple Test Template -->
+    <template id="bookstore_test" name="Bookstore Test">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h1>Bookstore Test Page</h1>
+                            <p>If you can see this page, the routing is working!</p>
+                            <p><a href="/bookstore">Go to main bookstore page</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Simple Fallback Template -->
+    <template id="bookstore_simple" name="Bookstore Simple">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h1>Bookstore</h1>
+                            <p>Welcome to our bookstore!</p>
+                            <t t-if="error">
+                                <div class="alert alert-warning">
+                                    <strong>Error:</strong> <span t-esc="error"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
     <!-- Add menu item to website -->
     <record id="menu_bookstore_website" model="website.menu">
         <field name="name">Bookstore</field>
@@ -248,6 +286,14 @@
         <field name="parent_id" ref="website.main_menu"/>
         <field name="sequence">50</field>
         <field name="website_id"></field>
+    </record>
+
+    <!-- Add a test menu item -->
+    <record id="menu_bookstore_test" model="website.menu">
+        <field name="name">Bookstore Test</field>
+        <field name="url">/bookstore/test</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">51</field>
     </record>
 
     <!-- Add a webpage record for better SEO and management -->
