@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="bookstore_home" name="Bookstore Home">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h1>Welcome to Our Bookstore</h1>
+                            <p>Discover amazing books from our collection</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <t t-foreach="books" t-as="book">
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title" t-esc="book.name"/>
+                                        <p class="card-text">
+                                            <strong>Author:</strong> <span t-esc="book.author"/><br/>
+                                            <strong>Price:</strong> $<span t-esc="book.price"/><br/>
+                                            <t t-if="book.category_id">
+                                                <strong>Category:</strong> <span t-esc="book.category_id.name"/>
+                                            </t>
+                                        </p>
+                                        <a t-attf-href="/bookstore/book/{{book.id}}" class="btn btn-primary">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="book_detail" name="Book Detail">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h1 t-esc="book.name"/>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p><strong>Author:</strong> <span t-esc="book.author"/></p>
+                                    <p><strong>ISBN:</strong> <span t-esc="book.isbn"/></p>
+                                    <p><strong>Price:</strong> $<span t-esc="book.price"/></p>
+                                    <t t-if="book.category_id">
+                                        <p><strong>Category:</strong> <span t-esc="book.category_id.name"/></p>
+                                    </t>
+                                    <t t-if="book.description">
+                                        <h3>Description</h3>
+                                        <p t-esc="book.description"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <a href="/bookstore" class="btn btn-secondary">Back to Bookstore</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>
