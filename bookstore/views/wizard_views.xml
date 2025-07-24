@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Restock Wizard View -->
+    <record id="view_restock_wizard_form" model="ir.ui.view">
+        <field name="name">restock.wizard.form</field>
+        <field name="model">bookstore.restock.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Restock Book">
+                <sheet>
+                    <group>
+                        <field name="book_id" readonly="1"/>
+                        <field name="current_stock" readonly="1"/>
+                        <field name="quantity_to_add"/>
+                        <field name="new_cost_price"/>
+                    </group>
+                    <group>
+                        <field name="reason" colspan="2"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_restock" type="object" string="Restock" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Stock Log Views -->
+    <record id="view_stock_log_tree" model="ir.ui.view">
+        <field name="name">stock.log.tree</field>
+        <field name="model">bookstore.stock.log</field>
+        <field name="arch" type="xml">
+            <tree string="Stock Movements" create="false" edit="false">
+                <field name="date"/>
+                <field name="book_title"/>
+                <field name="book_category"/>
+                <field name="operation"/>
+                <field name="quantity"/>
+                <field name="user_id"/>
+                <field name="reason"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_stock_log_form" model="ir.ui.view">
+        <field name="name">stock.log.form</field>
+        <field name="model">bookstore.stock.log</field>
+        <field name="arch" type="xml">
+            <form string="Stock Movement" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="book_id"/>
+                            <field name="operation"/>
+                            <field name="quantity"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    <field name="reason"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_stock_log_search" model="ir.ui.view">
+        <field name="name">stock.log.search</field>
+        <field name="model">bookstore.stock.log</field>
+        <field name="arch" type="xml">
+            <search string="Stock Movements">
+                <field name="book_id"/>
+                <field name="book_title"/>
+                <field name="operation"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter string="Restock" name="restock" domain="[('operation', '=', 'restock')]"/>
+                <filter string="Sales" name="sales" domain="[('operation', '=', 'sale')]"/>
+                <filter string="Adjustments" name="adjustments" domain="[('operation', '=', 'adjustment')]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('date', '>=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('date', '&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]"/>
+                <filter string="This Week" name="this_week" domain="[('date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Book" name="group_book" context="{'group_by': 'book_id'}"/>
+                    <filter string="Operation" name="group_operation" context="{'group_by': 'operation'}"/>
+                    <filter string="User" name="group_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Book Report Views -->
+    <record id="view_book_report_tree" model="ir.ui.view">
+        <field name="name">book.report.tree</field>
+        <field name="model">bookstore.book.report</field>
+        <field name="arch" type="xml">
+            <tree string="Book Sales Report" create="false" edit="false">
+                <field name="book_id"/>
+                <field name="category_id"/>
+                <field name="total_sold"/>
+                <field name="total_revenue"/>
+                <field name="stock_quantity"/>
+                <field name="profit_margin"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_book_report_search" model="ir.ui.view">
+        <field name="name">book.report.search</field>
+        <field name="model">bookstore.book.report</field>
+        <field name="arch" type="xml">
+            <search string="Book Sales Report">
+                <field name="book_id"/>
+                <field name="category_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_stock_log" model="ir.actions.act_window">
+        <field name="name">Stock Movements</field>
+        <field name="res_model">bookstore.stock.log</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_stock_log_search"/>
+    </record>
+
+    <record id="action_book_report" model="ir.actions.act_window">
+        <field name="name">Book Sales Report</field>
+        <field name="res_model">bookstore.book.report</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_book_report_search"/>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_bookstore_reports" name="Reports" parent="menu_bookstore_root" sequence="30"/>
+    <menuitem id="menu_stock_log" name="Stock Movements" parent="menu_bookstore_reports" action="action_stock_log"/>
+    <menuitem id="menu_book_report" name="Sales Report" parent="menu_bookstore_reports" action="action_book_report"/>
+</odoo>

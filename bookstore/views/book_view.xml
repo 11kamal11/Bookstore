@@ -4,14 +4,26 @@
         <field name="model">bookstore.book</field>
         <field name="arch" type="xml">
             <form string="Book">
+                <header>
+                    <button name="action_restock" type="object" string="Restock" class="btn-primary"/>
+                    <button name="action_mark_as_featured" type="object" string="Mark as Featured" 
+                            attrs="{'invisible': [('featured', '=', True)]}"/>
+                    <button name="action_unmark_as_featured" type="object" string="Unmark Featured" 
+                            attrs="{'invisible': [('featured', '=', False)]}"/>
+                    <field name="stock_status" widget="statusbar"/>
+                </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
                             <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
                         </button>
                     </div>
+                    
+                    <widget name="web_ribbon" title="Featured" bg_color="bg-success" 
+                            attrs="{'invisible': [('featured', '=', False)]}"/>
+                    
                     <group>
-                        <group>
+                        <group name="basic_info">
                             <field name="name"/>
                             <field name="author"/>
                             <field name="isbn"/>
@@ -19,25 +31,56 @@
                             <field name="publisher"/>
                             <field name="edition"/>
                         </group>
-                        <group>
+                        <group name="details">
+                            <field name="book_format"/>
+                            <field name="condition"/>
+                            <field name="language"/>
+                            <field name="genre"/>
+                            <field name="pages"/>
+                            <field name="weight"/>
+                            <field name="dimensions"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group name="pricing">
                             <field name="price"/>
                             <field name="cost_price"/>
                             <field name="profit_margin" readonly="1"/>
+                        </group>
+                        <group name="stock">
                             <field name="stock_quantity"/>
+                            <field name="min_stock_level"/>
+                            <field name="reorder_quantity"/>
                             <field name="is_available" readonly="1"/>
+                            <field name="total_value" readonly="1"/>
                         </group>
                     </group>
+                    
                     <group>
-                        <group>
+                        <group name="supplier">
+                            <field name="supplier_id"/>
+                        </group>
+                        <group name="sales">
+                            <field name="total_sold"/>
+                            <field name="last_sale_date"/>
+                            <field name="featured"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group name="dates">
                             <field name="publication_date"/>
                             <field name="age_years" readonly="1"/>
-                            <field name="pages"/>
-                            <field name="language"/>
+                        </group>
+                        <group name="tags">
+                            <field name="tags" placeholder="e.g., bestseller, award-winning, classic"/>
                         </group>
                     </group>
+                    
                     <notebook>
                         <page string="Description">
-                            <field name="description"/>
+                            <field name="description" placeholder="Enter book description..."/>
                         </page>
                     </notebook>
                 </sheet>
@@ -81,10 +124,20 @@
             <search string="Books">
                 <field name="name"/>
                 <field name="author"/>
-                <field name="category_id"/>
                 <field name="isbn"/>
+                <field name="category_id"/>
+                <field name="publisher"/>
+                <field name="genre"/>
+                <field name="tags"/>
+                <separator/>
                 <filter string="Available" name="available" domain="[('stock_quantity', '>', 0)]"/>
                 <filter string="Out of Stock" name="out_of_stock" domain="[('stock_quantity', '=', 0)]"/>
+                <filter string="Low Stock" name="low_stock" domain="[('stock_quantity', '&lt;=', 'min_stock_level'), ('stock_quantity', '>', 0)]"/>
+                <filter string="Featured" name="featured" domain="[('featured', '=', True)]"/>
+                <separator/>
+                <filter string="New Condition" name="new" domain="[('condition', '=', 'new')]"/>
+                <filter string="E-books" name="ebooks" domain="[('book_format', '=', 'ebook')]"/>
+                <filter string="Hardcover" name="hardcover" domain="[('book_format', '=', 'hardcover')]"/>
                 <separator/>
                 <filter string="Active" name="active" domain="[('active', '=', True)]"/>
                 <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
@@ -92,6 +145,9 @@
                     <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
                     <filter string="Author" name="group_author" context="{'group_by': 'author'}"/>
                     <filter string="Language" name="group_language" context="{'group_by': 'language'}"/>
+                    <filter string="Format" name="group_format" context="{'group_by': 'book_format'}"/>
+                    <filter string="Stock Status" name="group_stock_status" context="{'group_by': 'stock_status'}"/>
+                    <filter string="Condition" name="group_condition" context="{'group_by': 'condition'}"/>
                 </group>
             </search>
         </field>
@@ -103,11 +159,21 @@
         <field name="name">book.list.simple</field>
         <field name="model">bookstore.book</field>
         <field name="arch" type="xml">
-            <list string="Books">
+            <list string="Books" decoration-danger="stock_quantity &lt;= 0" 
+                  decoration-warning="stock_quantity &lt;= min_stock_level and stock_quantity &gt; 0"
+                  decoration-info="featured == True">
                 <field name="name"/>
                 <field name="author"/>
+                <field name="category_id"/>
+                <field name="book_format"/>
+                <field name="condition"/>
                 <field name="price"/>
                 <field name="stock_quantity"/>
+                <field name="stock_status"/>
+                <field name="total_sold"/>
+                <field name="profit_margin"/>
+                <field name="featured" invisible="1"/>
+                <field name="min_stock_level" invisible="1"/>
             </list>
         </field>
     </record>
@@ -118,12 +184,62 @@
         <field name="arch" type="xml">
             <form string="Category">
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_books" type="object" class="oe_stat_button" icon="fa-book">
+                            <field name="book_count" widget="statinfo" string="Books"/>
+                        </button>
+                    </div>
+                    
+                    <widget name="web_ribbon" title="Featured" bg_color="bg-info" 
+                            attrs="{'invisible': [('featured', '=', False)]}"/>
+                    
                     <group>
-                        <field name="name"/>
-                        <field name="book_count" readonly="1"/>
+                        <group name="basic_info">
+                            <field name="name"/>
+                            <field name="category_code"/>
+                            <field name="parent_id"/>
+                            <field name="display_order"/>
+                        </group>
+                        <group name="management">
+                            <field name="category_manager_id"/>
+                            <field name="featured"/>
+                            <field name="active"/>
+                        </group>
                     </group>
-                    <field name="description"/>
-                    <field name="book_ids" readonly="1"/>
+                    
+                    <group>
+                        <group name="statistics">
+                            <field name="in_stock_books" readonly="1"/>
+                            <field name="avg_book_price" readonly="1"/>
+                            <field name="total_books_value" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Enter category description..."/>
+                        </page>
+                        <page string="Child Categories">
+                            <field name="child_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="book_count"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Books">
+                            <field name="book_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="author"/>
+                                    <field name="price"/>
+                                    <field name="stock_quantity"/>
+                                    <field name="stock_status"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -133,9 +249,18 @@
         <field name="name">category.list</field>
         <field name="model">bookstore.category</field>
         <field name="arch" type="xml">
-            <list string="Categories">
+            <list string="Categories" decoration-info="featured == True">
+                <field name="display_order" widget="handle"/>
                 <field name="name"/>
+                <field name="category_code"/>
+                <field name="parent_id"/>
                 <field name="book_count"/>
+                <field name="in_stock_books"/>
+                <field name="avg_book_price"/>
+                <field name="total_books_value"/>
+                <field name="category_manager_id"/>
+                <field name="featured" invisible="1"/>
+                <field name="active"/>
             </list>
         </field>
     </record>
