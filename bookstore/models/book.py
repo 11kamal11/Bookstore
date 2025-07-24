@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 from datetime import date
 
 class Book(models.Model):
@@ -59,15 +60,15 @@ class Book(models.Model):
     def _check_isbn(self):
         for record in self:
             if record.isbn and len(record.isbn) not in [10, 13]:
-                raise models.ValidationError("ISBN must be 10 or 13 characters long.")
+                raise ValidationError("ISBN must be 10 or 13 characters long.")
     
     @api.constrains('price', 'cost_price')
     def _check_prices(self):
         for record in self:
             if record.price < 0:
-                raise models.ValidationError("Price cannot be negative.")
+                raise ValidationError("Price cannot be negative.")
             if record.cost_price < 0:
-                raise models.ValidationError("Cost price cannot be negative.")
+                raise ValidationError("Cost price cannot be negative.")
 
 
 class BookCategory(models.Model):
