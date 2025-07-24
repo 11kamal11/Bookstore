@@ -99,16 +99,16 @@
 
     <!-- Category Views -->
     <!-- First create a simple tree view for books in category -->
-    <record id="view_book_tree_simple" model="ir.ui.view">
-        <field name="name">book.tree.simple</field>
+    <record id="view_book_list_simple" model="ir.ui.view">
+        <field name="name">book.list.simple</field>
         <field name="model">bookstore.book</field>
         <field name="arch" type="xml">
-            <tree string="Books">
+            <list string="Books">
                 <field name="name"/>
                 <field name="author"/>
                 <field name="price"/>
                 <field name="stock_quantity"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -129,14 +129,14 @@
         </field>
     </record>
 
-    <record id="view_category_tree" model="ir.ui.view">
-        <field name="name">category.tree</field>
+    <record id="view_category_list" model="ir.ui.view">
+        <field name="name">category.list</field>
         <field name="model">bookstore.category</field>
         <field name="arch" type="xml">
-            <tree string="Categories">
+            <list string="Categories">
                 <field name="name"/>
                 <field name="book_count"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -144,14 +144,14 @@
     <record id="action_books" model="ir.actions.act_window">
         <field name="name">Books</field>
         <field name="res_model">bookstore.book</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_book_search"/>
     </record>
 
     <record id="action_categories" model="ir.actions.act_window">
         <field name="name">Categories</field>
         <field name="res_model">bookstore.category</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <!-- Menu Items -->
