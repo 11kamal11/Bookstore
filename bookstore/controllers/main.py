@@ -8,8 +8,17 @@ class BookstoreController(http.Controller):
     def bookstore_home(self, **kwargs):
         """Bookstore homepage"""
         try:
-            # Search for all books, with safe fallbacks
-            books = request.env['bookstore.book'].sudo().search([])
+            # Search for all books, with safe fallbacks for missing fields
+            domain = []
+            
+            # Only add is_published filter if the field exists
+            try:
+                if 'is_published' in request.env['bookstore.book']._fields:
+                    domain.append(('is_published', '=', True))
+            except:
+                pass
+            
+            books = request.env['bookstore.book'].sudo().search(domain)
             categories = request.env['bookstore.category'].sudo().search([])
             
             return request.render('bookstore.bookstore_home', {

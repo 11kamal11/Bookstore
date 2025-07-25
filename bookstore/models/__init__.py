@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from . import book_minimal
+from . import book
