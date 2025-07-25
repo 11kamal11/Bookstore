@@ -11,6 +11,8 @@
                             invisible="is_published"/>
                     <button name="action_unpublish_website" string="Unpublish from Website" type="object" class="btn-secondary"
                             invisible="not is_published"/>
+                    <button name="_create_product" string="Create Product" type="object" class="btn-info"
+                            invisible="product_id"/>
                     <field name="is_published" widget="boolean_toggle" options="{'autosave': False}"/>
                 </header>
                 <sheet>

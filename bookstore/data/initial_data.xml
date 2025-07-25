@@ -16,43 +16,5 @@
             <field name="name">Technology</field>
             <field name="description">Programming, IT, and technology books</field>
         </record>
-        
-        <!-- Sample Books -->
-        <record id="book_sample_1" model="bookstore.book">
-            <field name="name">Python Programming for Beginners</field>
-            <field name="author">John Smith</field>
-            <field name="isbn">978-1234567890</field>
-            <field name="price">29.99</field>
-            <field name="description">A comprehensive guide to learning Python programming from scratch.</field>
-            <field name="category_id" ref="category_technology"/>
-            <field name="is_published">True</field>
-        </record>
-        
-        <record id="book_sample_2" model="bookstore.book">
-            <field name="name">The Great Adventure</field>
-            <field name="author">Jane Doe</field>
-            <field name="isbn">978-0987654321</field>
-            <field name="price">19.99</field>
-            <field name="description">An exciting fictional story about courage and friendship.</field>
-            <field name="category_id" ref="category_fiction"/>
-            <field name="is_published">True</field>
-        </record>
-        
-        <!-- Product Category for Books -->
-        <record id="product_category_books" model="product.category">
-            <field name="name">Books</field>
-            <field name="parent_id" ref="product.product_category_all"/>
-        </record>
-        
-        <!-- Payment Terms for Book Orders -->
-        <record id="payment_term_immediate" model="account.payment.term">
-            <field name="name">Immediate Payment</field>
-            <field name="note">Payment required upon ordering</field>
-        </record>
-        
-        <record id="payment_term_30_days" model="account.payment.term">
-            <field name="name">30 Days</field>
-            <field name="note">Payment due within 30 days</field>
-        </record>
     </data>
 </odoo>

@@ -15,23 +15,6 @@ class Book(models.Model):
     product_id = fields.Many2one('product.product', string='Related Product', ondelete='cascade')
     is_published = fields.Boolean('Published on Website', default=True)
     
-    @api.model
-    def create(self, vals):
-        """Create book and automatically create related product"""
-        book = super(Book, self).create(vals)
-        book._create_product()
-        return book
-    
-    def write(self, vals):
-        """Update book and sync with related product"""
-        result = super(Book, self).write(vals)
-        for book in self:
-            if book.product_id:
-                book._update_product()
-            else:
-                book._create_product()
-        return result
-    
     def _create_product(self):
         """Create a product.product record for this book"""
         if not self.product_id:
@@ -86,22 +69,3 @@ class BookCategory(models.Model):
     name = fields.Char('Category Name', required=True)
     description = fields.Text('Description')
     book_ids = fields.One2many('bookstore.book', 'category_id', string='Books')
-    product_category_id = fields.Many2one('product.category', string='Related Product Category', ondelete='cascade')
-    
-    @api.model
-    def create(self, vals):
-        """Create category and automatically create related product category"""
-        category = super(BookCategory, self).create(vals)
-        category._create_product_category()
-        return category
-    
-    def _create_product_category(self):
-        """Create a product.category record for this book category"""
-        if not self.product_category_id:
-            category_vals = {
-                'name': f'Books - {self.name}',
-                'parent_id': False,
-            }
-            
-            product_category = self.env['product.category'].create(category_vals)
-            self.product_category_id = product_category.id
