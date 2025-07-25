@@ -8,8 +8,8 @@
             <form string="Restock Book">
                 <sheet>
                     <group>
-                        <field name="book_id" readonly="1"/>
-                        <field name="current_stock" readonly="1"/>
+                        <field name="book_id" modifiers="{'readonly': true}"/>
+                        <field name="current_stock" modifiers="{'readonly': true}"/>
                         <field name="quantity_to_add"/>
                         <field name="new_cost_price"/>
                     </group>
