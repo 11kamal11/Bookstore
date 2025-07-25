@@ -8,6 +8,7 @@
     'category': 'Sales',
         'depends': ['base', 'website', 'website_sale', 'sale_management', 'stock'],
     'data': [
+        'data/migration.xml',
         'data/initial_data.xml',
         'data/server_actions.xml',
         'security/ir.model.access.csv',

@@ -7,13 +7,12 @@
         <field name="arch" type="xml">
             <form string="Book">
                 <header>
-                    <button name="action_publish_website" string="Publish on Website" type="object" class="btn-primary"
+                    <!-- Temporarily remove publish buttons until field exists -->
+                    <!-- <button name="action_publish_website" string="Publish on Website" type="object" class="btn-primary"
                             invisible="is_published"/>
                     <button name="action_unpublish_website" string="Unpublish from Website" type="object" class="btn-secondary"
                             invisible="not is_published"/>
-                    <button name="_create_product" string="Create Product" type="object" class="btn-info"
-                            invisible="product_id"/>
-                    <field name="is_published" widget="boolean_toggle" options="{'autosave': False}"/>
+                    <field name="is_published" widget="boolean_toggle" options="{'autosave': False}"/> -->
                 </header>
                 <sheet>
                     <group>
@@ -26,7 +25,7 @@
                         <group>
                             <field name="category_id"/>
                             <field name="product_id" readonly="1"/>
-                            <field name="is_published"/>
+                            <!-- <field name="is_published"/> -->
                         </group>
                     </group>
                     <group>
@@ -42,13 +41,14 @@
         <field name="name">book.list</field>
         <field name="model">bookstore.book</field>
         <field name="arch" type="xml">
+
             <list string="Books">
                 <field name="name"/>
                 <field name="author"/>
                 <field name="isbn"/>
                 <field name="price"/>
                 <field name="category_id"/>
-                <field name="is_published" widget="boolean_toggle"/>
+                <!-- <field name="is_published" widget="boolean_toggle"/> -->
                 <field name="product_id"/>
             </list>
         </field>

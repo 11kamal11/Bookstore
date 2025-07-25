@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Migration script to add missing columns if needed -->
+        <function model="bookstore.book" name="_auto_init">
+            <!-- This will trigger the automatic creation of missing columns -->
+        </function>
+    </data>
+</odoo>
