@@ -7,10 +7,10 @@
         <field name="arch" type="xml">
             <form string="Book">
                 <header>
-                    <button name="action_publish_website" string="Publish on Website" type="object" class="btn-primary" 
-                            attrs="{'invisible': [('is_published', '=', True)]}"/>
-                    <button name="action_unpublish_website" string="Unpublish from Website" type="object" class="btn-secondary" 
-                            attrs="{'invisible': [('is_published', '=', False)]}"/>
+                    <button name="action_publish_website" string="Publish on Website" type="object" class="btn-primary"
+                            invisible="is_published"/>
+                    <button name="action_unpublish_website" string="Unpublish from Website" type="object" class="btn-secondary"
+                            invisible="not is_published"/>
                     <field name="is_published" widget="boolean_toggle" options="{'autosave': False}"/>
                 </header>
                 <sheet>
