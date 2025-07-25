@@ -25,29 +25,12 @@
                                         <p class="card-text">
                                             <strong>Author:</strong> <span t-esc="book.author"/><br/>
                                             <strong>Price:</strong> $<span t-esc="book.price"/><br/>
-                                            <strong>In Stock:</strong> <span t-esc="book.quantity"/> available<br/>
                                             <t t-if="book.category_id">
                                                 <strong>Category:</strong> <span t-esc="book.category_id.name"/>
                                             </t>
                                         </p>
                                         <div class="mt-auto">
-                                            <t t-if="book.quantity > 0">
-                                                <form action="/shop/cart/update" method="post" class="d-grid gap-2">
-                                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                                                    <input type="hidden" name="product_id" t-att-value="book.product_id.id if book.product_id else book.id"/>
-                                                    <div class="input-group mb-2">
-                                                        <input type="number" name="add_qty" value="1" min="1" t-att-max="book.quantity" class="form-control" placeholder="Qty"/>
-                                                        <button type="submit" class="btn btn-success">
-                                                            <i class="fa fa-cart-plus"></i> Add to Cart
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                                <a t-attf-href="/bookstore/book/#{book.id}" class="btn btn-outline-primary w-100">View Details</a>
-                                            </t>
-                                            <t t-else="">
-                                                <p class="text-danger mb-2">Out of Stock</p>
-                                                <a t-attf-href="/bookstore/book/#{book.id}" class="btn btn-outline-primary w-100">View Details</a>
-                                            </t>
+                                            <a t-attf-href="/bookstore/book/#{book.id}" class="btn btn-outline-primary w-100">View Details</a>
                                         </div>
                                     </div>
                                 </div>
@@ -78,7 +61,6 @@
                                     <p><strong>Author:</strong> <span t-esc="book.author"/></p>
                                     <p><strong>ISBN:</strong> <span t-esc="book.isbn"/></p>
                                     <p><strong>Price:</strong> $<span t-esc="book.price"/></p>
-                                    <p><strong>Stock:</strong> <span t-esc="book.quantity"/> available</p>
                                     <t t-if="book.category_id">
                                         <p><strong>Category:</strong> <span t-esc="book.category_id.name"/></p>
                                     </t>
@@ -90,35 +72,15 @@
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h5 class="card-title">Purchase Book</h5>
+                                            <h5 class="card-title">Book Information</h5>
                                             <div class="mb-3">
                                                 <h4 class="text-primary">$<span t-esc="book.price"/></h4>
-                                                <p class="text-muted mb-1">Stock: <span t-esc="book.quantity"/> available</p>
                                             </div>
-                                            <t t-if="book.quantity > 0">
-                                                <form action="/shop/cart/update" method="post">
-                                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                                                    <input type="hidden" name="product_id" t-att-value="book.product_id.id if book.product_id else book.id"/>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Quantity:</label>
-                                                        <input type="number" name="add_qty" value="1" min="1" t-att-max="book.quantity" class="form-control"/>
-                                                    </div>
-                                                    <div class="d-grid gap-2">
-                                                        <button type="submit" class="btn btn-success btn-lg">
-                                                            <i class="fa fa-cart-plus"></i> Add to Cart
-                                                        </button>
-                                                        <a href="/shop/cart" class="btn btn-outline-primary">
-                                                            <i class="fa fa-shopping-cart"></i> View Cart
-                                                        </a>
-                                                    </div>
-                                                </form>
-                                            </t>
-                                            <t t-else="">
-                                                <div class="alert alert-warning">
-                                                    <strong>Out of Stock</strong><br/>
-                                                    This book is currently unavailable.
-                                                </div>
-                                            </t>
+                                            <div class="d-grid">
+                                                <a href="/bookstore" class="btn btn-outline-primary">
+                                                    <i class="fa fa-arrow-left"></i> Back to Bookstore
+                                                </a>
+                                            </div>
                                                     </form>
                                                 </t>
                                                 <t t-else="">
