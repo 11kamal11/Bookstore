@@ -10,6 +10,7 @@ class Book(models.Model):
     author = fields.Char('Author', required=True)
     isbn = fields.Char('ISBN')
     price = fields.Float('Price')
+    quantity = fields.Integer('Quantity in Stock', default=0)
     description = fields.Text('Description')
     category_id = fields.Many2one('bookstore.category', string='Category')
     product_id = fields.Many2one('product.product', string='Related Product', ondelete='cascade')
@@ -59,6 +60,13 @@ class Book(models.Model):
         self.write({'is_published': False})
         if self.product_id:
             self.product_id.write({'website_published': False})
+    
+    def reduce_quantity(self, qty):
+        """Reduce book quantity when sold"""
+        if self.quantity >= qty:
+            self.quantity -= qty
+            return True
+        return False
 
 
 class BookCategory(models.Model):

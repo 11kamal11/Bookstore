@@ -10,11 +10,9 @@
     'data': [
         'data/migration.xml',
         'data/initial_data.xml',
-        'data/server_actions.xml',
         'security/ir.model.access.csv',
         'views/book_view.xml',
         'views/website_templates.xml',
-        'wizard/sync_wizard_views.xml',
     ],
     'installable': True,
     'application': True,
