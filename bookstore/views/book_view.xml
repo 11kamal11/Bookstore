@@ -1,134 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <!-- Book Form View -->
-    <record id="view_book_form" model="ir.ui.view">
-        <field name="name">book.form</field>
-        <field name="model">bookstore.book</field>
-        <field name="arch" type="xml">
-            <form string="Book">
-                <header>
-                    <button name="action_publish_website" string="Publish on Website" type="object" class="btn-primary"
-                            attrs="{'invisible': [('is_published', '=', True)]}"/>
-                    <button name="action_unpublish_website" string="Unpublish from Website" type="object" class="btn-secondary"
-                            attrs="{'invisible': [('is_published', '=', False)]}"/>
-                    <button name="_create_product" string="Create Product" type="object" class="btn-secondary"
-                            attrs="{'invisible': [('product_id', '!=', False)]}"/>
-                    <field name="is_published" widget="boolean_toggle" options="{'autosave': False}"/>
-                </header>
-                <sheet>
-                    <group>
-                        <group>
-                            <field name="name"/>
-                            <field name="author"/>
-                            <field name="isbn"/>
-                            <field name="price"/>
-                        </group>
-                        <group>
-                            <field name="category_id"/>
-                            <field name="quantity"/>
-                            <field name="is_published"/>
-                        </group>
-                    </group>
-                    <group>
-                        <field name="description"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <!-- Book List View (replacing tree) -->
-    <record id="view_book_tree" model="ir.ui.view">
-        <field name="name">book.list</field>
-        <field name="model">bookstore.book</field>
-        <field name="arch" type="xml">
-
-            <list string="Books">
-                <field name="name"/>
-                <field name="author"/>
-                <field name="isbn"/>
-                <field name="price"/>
-                <field name="category_id"/>
-                <!-- <field name="quantity"/> -->
-                <!-- <field name="is_published" widget="boolean_toggle"/> -->
-            </list>
-        </field>
-    </record>
-
-    <!-- Book Search View -->
-    <record id="view_book_search" model="ir.ui.view">
-        <field name="name">book.search</field>
-        <field name="model">bookstore.book</field>
-        <field name="arch" type="xml">
-            <search string="Search Books">
-                <field name="name"/>
-                <field name="author"/>
-                <field name="isbn"/>
-                <field name="category_id"/>
-                <group expand="0" string="Group By">
-                    <filter string="Category" name="group_by_category" domain="[]" context="{'group_by': 'category_id'}"/>
-                    <filter string="Author" name="group_by_author" domain="[]" context="{'group_by': 'author'}"/>
-                </group>
-            </search>
-        </field>
-    </record>
-
-    <!-- Category Form View -->
-    <record id="view_category_form" model="ir.ui.view">
-        <field name="name">category.form</field>
-        <field name="model">bookstore.category</field>
-        <field name="arch" type="xml">
-            <form string="Category">
-                <sheet>
-                    <group>
-                        <field name="name"/>
-                        <field name="description"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <!-- Category List View (replacing tree) -->
-    <record id="view_category_tree" model="ir.ui.view">
-        <field name="name">category.list</field>
-        <field name="model">bookstore.category</field>
-        <field name="arch" type="xml">
-            <list string="Categories">
-                <field name="name"/>
-                <field name="description"/>
-            </list>
-        </field>
-    </record>
-
-    <!-- Book Action -->
-    <record id="action_books" model="ir.actions.act_window">
-        <field name="name">Books</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">bookstore.book</field>
-        <field name="view_mode">list,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create your first book!
-            </p>
-        </field>
-    </record>
-
-    <!-- Category Action -->
-    <record id="action_categories" model="ir.actions.act_window">
-        <field name="name">Categories</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">bookstore.category</field>
-        <field name="view_mode">list,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create your first category!
-            </p>
-        </field>
-    </record>
-
-    <!-- Menu Items -->
-    <menuitem id="menu_bookstore_root" name="Bookstore" sequence="10"/>
-    <menuitem id="menu_books" name="Books" parent="menu_bookstore_root" action="action_books" sequence="10"/>
-    <menuitem id="menu_categories" name="Categories" parent="menu_bookstore_root" action="action_categories" sequence="20"/>
-</odoo>
+<!-- Book List View (using list instead of tree) -->
+<record id="view_book_list" model="ir.ui.view">
+    <field name="name">book.list</field>
+    <field name="model">bookstore.book</field>
+    <field name="arch" type="xml">
+        <list string="Books">
+            <field name="name"/>
+            <field name="author"/>
+            <field name="isbn"/>
+            <field name="price"/>
+            <field name="category_id"/>
+            <!-- <field name="quantity"/> -->
+            <!-- <field name="is_published" widget="boolean_toggle"/> -->
+        </list>
+    </field>
+</record>
