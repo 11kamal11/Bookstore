@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-# Empty wizard module
+from . import sync_wizard
