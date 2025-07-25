@@ -6,13 +6,26 @@
         <field name="model">bookstore.book</field>
         <field name="arch" type="xml">
             <form string="Book">
+                <header>
+                    <button name="action_publish_website" string="Publish on Website" type="object" class="btn-primary" 
+                            attrs="{'invisible': [('is_published', '=', True)]}"/>
+                    <button name="action_unpublish_website" string="Unpublish from Website" type="object" class="btn-secondary" 
+                            attrs="{'invisible': [('is_published', '=', False)]}"/>
+                    <field name="is_published" widget="boolean_toggle" options="{'autosave': False}"/>
+                </header>
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="author"/>
-                        <field name="isbn"/>
-                        <field name="price"/>
-                        <field name="category_id"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="author"/>
+                            <field name="isbn"/>
+                            <field name="price"/>
+                        </group>
+                        <group>
+                            <field name="category_id"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="is_published"/>
+                        </group>
                     </group>
                     <group>
                         <field name="description"/>
@@ -33,6 +46,8 @@
                 <field name="isbn"/>
                 <field name="price"/>
                 <field name="category_id"/>
+                <field name="is_published" widget="boolean_toggle"/>
+                <field name="product_id"/>
             </list>
         </field>
     </record>

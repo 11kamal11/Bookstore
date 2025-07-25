@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_book_sync_wizard_form" model="ir.ui.view">
+        <field name="name">book.sync.wizard.form</field>
+        <field name="model">bookstore.sync.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sync Books with Products">
+                <group>
+                    <field name="sync_all"/>
+                    <field name="update_existing"/>
+                    <field name="book_ids" attrs="{'invisible': [('sync_all', '=', True)]}" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_sync_products" string="Sync Products" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_book_sync_wizard" model="ir.actions.act_window">
+        <field name="name">Sync Books with Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bookstore.sync.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    
+    <!-- Add to Books menu -->
+    <menuitem id="menu_sync_books" name="Sync Products" parent="menu_bookstore_root" action="action_book_sync_wizard" sequence="30"/>
+</odoo>

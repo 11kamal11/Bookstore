@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Server Action to Clear Old Data and Sync -->
+    <record id="action_clear_and_sync" model="ir.actions.server">
+        <field name="name">Clear Old Data and Sync Books</field>
+        <field name="model_id" ref="model_bookstore_book"/>
+        <field name="state">code</field>
+        <field name="code">
+# Clear old products that are not linked to books
+orphaned_products = env['product.product'].search([
+    ('default_code', 'like', 'BOOK_%'),
+    ('id', 'not in', env['bookstore.book'].search([]).mapped('product_id.id'))
+])
+orphaned_products.unlink()
+
+# Sync all books with products
+books = env['bookstore.book'].search([])
+for book in books:
+    if not book.product_id:
+        book._create_product()
+    else:
+        book._update_product()
+
+action = {
+    'type': 'ir.actions.client',
+    'tag': 'display_notification',
+    'params': {
+        'title': 'Data Cleared and Synced',
+        'message': f'Successfully synced {len(books)} books. Removed orphaned products.',
+        'type': 'success',
+        'sticky': False,
+    }
+}
+        </field>
+    </record>
+    
+    <!-- Menu item for the action -->
+    <menuitem id="menu_clear_sync_data" 
+              name="Clear &amp; Sync Data" 
+              parent="menu_bookstore_root" 
+              action="action_clear_and_sync" 
+              sequence="40"/>
+</odoo>

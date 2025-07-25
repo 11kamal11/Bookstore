@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_bookstore_book,access.bookstore.book,model_bookstore_book,,1,1,1,1
 access_bookstore_category,access.bookstore.category,model_bookstore_category,,1,1,1,1
+access_bookstore_sync_wizard,access.bookstore.sync.wizard,model_bookstore_sync_wizard,,1,1,1,1

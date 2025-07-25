@@ -29,11 +29,11 @@
                                             </t>
                                         </p>
                                         <div class="d-flex justify-content-between">
-                            <a t-attf-href="/bookstore/book/#{book.id}" class="btn btn-outline-primary">View Details</a>
-                            <t t-if="book.product_id">
-                                <a t-attf-href="/shop/product/#{book.product_id.id}" class="btn btn-success">Buy Now</a>
-                            </t>
-                        </div>
+                                            <a t-attf-href="/bookstore/book/#{book.id}" class="btn btn-outline-primary">View Details</a>
+                                            <t t-if="book.product_id">
+                                                <a t-attf-href="/shop/product/#{book.product_id.id}" class="btn btn-success">Buy Now</a>
+                                            </t>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
