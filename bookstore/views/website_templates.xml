@@ -9,8 +9,7 @@
                             <h1>Welcome to Our Bookstore</h1>
                             <p>Discover amazing books from our collection</p>
                             <div class="mb-3">
-                                <a href="/shop/books" class="btn btn-primary me-2">Shop Books</a>
-                                <a href="/shop" class="btn btn-outline-primary">View All Products</a>
+                                <a href="/bookstore" class="btn btn-primary me-2">Browse Books</a>
                             </div>
                         </div>
                     </div>
@@ -30,9 +29,6 @@
                                         </p>
                                         <div class="d-flex justify-content-between">
                             <a t-attf-href="/bookstore/book/#{book.id}" class="btn btn-outline-primary">View Details</a>
-                            <t t-if="book.product_id">
-                                <a t-attf-href="/shop/product/#{book.product_id.id}" class="btn btn-success">Buy Now</a>
-                            </t>
                         </div>
                                     </div>
                                 </div>
@@ -101,38 +97,12 @@
         </t>
     </template>
     
-    <!-- Sync Complete Template -->
-    <template id="sync_complete" name="Sync Complete">
-        <t t-call="website.layout">
-            <div id="wrap">
-                <div class="container">
-                    <div class="row mt-4">
-                        <div class="col-12 text-center">
-                            <h1>Sync Complete</h1>
-                            <p class="lead">Successfully synced <span t-esc="books_count"/> books with products.</p>
-                            <a href="/bookstore" class="btn btn-primary">Back to Bookstore</a>
-                            <a href="/shop/books" class="btn btn-success">View Shop</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </t>
-    </template>
-
     <!-- Website Menu Items -->
     <record id="bookstore_menu" model="website.menu">
         <field name="name">Bookstore</field>
         <field name="url">/bookstore</field>
         <field name="parent_id" ref="website.main_menu"/>
         <field name="sequence">50</field>
-    </record>
-    
-    <!-- Shop Books Menu -->
-    <record id="shop_books_menu" model="website.menu">
-        <field name="name">Shop Books</field>
-        <field name="url">/shop/books</field>
-        <field name="parent_id" ref="website.main_menu"/>
-        <field name="sequence">51</field>
     </record>
 
 </odoo>
